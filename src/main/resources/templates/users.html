@@ -40,9 +40,37 @@
       color: #fff;
       background-color: #00f;
     }
+    header {
+      background-color: #007bff;
+      color: #fff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+
+    header a {
+      color: #fff;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+
+    header a:hover {
+      text-decoration: underline;
+    }
+Y
   </style>
 </head>
 <body>
+<header>
+  <a href="http://localhost:8080/films"> Films</a>
+  <a href="http://localhost:8080/save"> Registration</a>
+  <a href="http://localhost:8080/users"> Users</a>
+  <a href="http://localhost:8080/films/add">Add film</a>
+  <a th:href="@{/logout}" href="http://localhost:8080/login"> Logout</a>
+</header>
+
 <h1>Users</h1>
 <table>
   <thead>

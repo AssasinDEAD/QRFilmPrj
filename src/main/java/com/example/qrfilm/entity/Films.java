@@ -20,6 +20,15 @@ public class Films {
     private String genre;
 
     private String link;
+    private String youtubeId;
+
+    public String getYoutubeId() {
+        return youtubeId;
+    }
+
+    public void setYoutubeId(String youtubeId) {
+        this.youtubeId = youtubeId;
+    }
     public Long getId() {
         return id;
     }

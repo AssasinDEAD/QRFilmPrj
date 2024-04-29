@@ -1,27 +1,28 @@
-//package com.example.qrfilm.service;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.stereotype.Service;
-//import com.example.qrfilm.repository.UserRepository;
-//import com.example.qrfilm.entity.User;
-//import com.example.qrfilm.entity.Role;
-//
-//@Service
-//public class UserService {
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-//
-//    public User registerUser(User user) {
-//        if (userRepository.findByEmail(user.getEmail()) != null) {
-//            throw new RuntimeException("Электронная почта уже существует");
-//        }
-//        user.setRole(Role.USER);
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        return userRepository.save(user);
-//    }
-//}
+package com.example.qrfilm.service;
+
+import com.example.qrfilm.entity.SaveData;
+import com.example.qrfilm.repository.SaveDataRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private SaveDataRepository saveDataRepository;
+
+    @Autowired
+    private UserSession userSession;
+
+    public SaveData findUserByEmailAndPassword(String email, String password) {
+        return saveDataRepository.findByEmailAndPassword(email, password);
+    }
+
+    public SaveData getCurrentUser() {
+        return userSession.getCurrentUser();
+    }
+
+    public void setCurrentUser(SaveData user) {
+        userSession.setCurrentUser(user);
+    }
+}

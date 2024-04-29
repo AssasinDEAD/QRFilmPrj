@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Watch Video</title>
+
+    <style>
+
+        body {
+            background-color: #1a1a2e;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            align-items: center;
+            width: 100%;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .video-container iframe {
+            border: none;
+            max-width: 100%;
+            height: 600px;
+        }
+
+        .comments-container {
+            background-color: #26263c;
+            border-top: 1px solid #3a3a57;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .comments-container h2 {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+        .watch{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        .video{
+            width: 90%;
+            height: 800px;
+        }
+        .comments-container {
+            background-color: #26263c;
+            border-top: 1px solid #3a3a57;
+        }
+        .rate{
+            padding: 30px;
+        }
+
+        .comments-container h2 {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+
+        .comments-list {
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            margin-bottom: 10px;
+        }
+
+        .comment span:first-child {
+            font-weight: bold;
+        }
+
+        .add-comment-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .add-comment-form textarea {
+            margin-bottom: 10px;
+            resize: none;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+
+        header a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="http://localhost:8080/films"> Films</a>
+    <a href="http://localhost:8080/save"> Registration</a>
+    <a th:if="${currentUser.role == 'admin'}" href="http://localhost:8080/users"> Users</a>
+    <a th:if="${currentUser.role == 'admin'}" href="http://localhost:8080/films/add">Add film</a>
+    <a th:if="${currentUser != null}" th:href="@{/logout}" href="http://localhost:8080/login"> Logout</a>
+</header>
+
+
+<h1 th:text="${film.title}"></h1>
+<div class="container">
+    <div class="watch" th:if="${film.link != null}">
+        <iframe class="video" width="560" height="315" th:src="${film.link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+
+    <form class="rate" th:action="@{/rating/add}" method="post">
+        <input type="hidden" th:name="filmId" th:value="${film.id}">
+        <select name="rating" required>
+            <option value="">Выберите рейтинг</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <button type="submit">Отправить рейтинг</button>
+    </form>
+
+
+    <div th:if="${averageRating != null}" class="average-rating" style="padding-bottom: 30px">
+        Средний рейтинг: <span th:text="${#numbers.formatDecimal(averageRating, 1, 1, 'POINT')}"></span>
+
+    </div>
+
+    <div class="comments-container">
+        <h2>Комментарии:</h2>
+        <div th:if="${comments != null}" class="comments-list">
+            <div th:each="comment : ${comments}" class="comment">
+                <span th:text="${comment.user.name}"></span>:
+                <span th:text="${comment.commentText}"></span>
+                <form th:if="${currentUser != null && (currentUser.role == 'admin' || currentUser.id == comment.user.id)}" th:action="@{/comment/delete}" method="post">
+                    <input type="hidden" th:name="commentId" th:value="${comment.id}">
+                    <input type="hidden" th:name="filmId" th:value="${film.id}">
+                    <button type="submit">Удалить</button>
+                </form>
+            </div>
+        </div>
+
+
+        <form th:if="${currentUser != null}" th:action="@{/comment/add}" method="post" class="add-comment-form">
+            <input type="hidden" th:name="filmId" th:value="${film.id}">
+            <textarea placeholder="Ваш комментарий" name="commentText" required></textarea>
+            <button type="submit">Добавить комментарий</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

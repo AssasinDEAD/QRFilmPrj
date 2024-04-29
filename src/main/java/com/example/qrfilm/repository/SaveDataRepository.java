@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SaveDataRepository extends JpaRepository<SaveData, Long> {
+    SaveData findByEmailAndPassword(String email, String password);
 }
+
