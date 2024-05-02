@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.02.2_13-jre-jammy
+FROM eclipse-temurin:21.0.3_9-jre-jammy
 COPY target/*.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "*/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
